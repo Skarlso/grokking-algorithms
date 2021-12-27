@@ -1,13 +1,16 @@
 package chapter01
 
-import "constraints"
+import (
+	"constraints"
+	"errors"
+)
 
 // BinarySearch binary search has a runtime of O(logn).
 // Why? Because it half the search list every time.
 // Logn has this property where it tells you how many times
 // you have to divide k with n to get to 1.
 // Log2(16)=4 -> 16 -> 8 -> 4 -> 2 -> 1
-func BinarySearch[T constraints.Ordered](list []T, item T) T {
+func BinarySearch[T constraints.Ordered](list []T, item T) (T, error) {
 	var result T
 	head := 0
 	tail := len(list) - 1
@@ -15,7 +18,7 @@ func BinarySearch[T constraints.Ordered](list []T, item T) T {
 		middle := head + tail
 		guess := list[middle]
 		if guess == item {
-			return guess
+			return guess, nil
 		}
 		if guess > item {
 			tail = middle - 1
@@ -23,5 +26,5 @@ func BinarySearch[T constraints.Ordered](list []T, item T) T {
 			head = middle + 1
 		}
 	}
-	return result
+	return result, errors.New("not found")
 }
