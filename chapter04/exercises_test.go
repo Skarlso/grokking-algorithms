@@ -70,6 +70,17 @@ func BenchmarkBinarySearchWithChopping(b *testing.B) {
 // BenchmarkBinarySearchWithHighAndLow-12          166489551                7.167 ns/op           0 B/op          0 allocs/op
 // PASS
 // ok      grokking-algorithms/chapter04   3.240s
+// WITH GENERICS:
+// go1.18beta1 test -bench=. -run=BenchmarkBinarySearch -benchmem
+// goos: darwin
+// goarch: amd64
+// pkg: grokking-algorithms/chapter04
+// cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+// BenchmarkBinarySearchWithChopping-12            89500888                12.98 ns/op            0 B/op          0 allocs/op
+// BenchmarkBinarySearchWithHighAndLow-12          165573376                7.264 ns/op           0 B/op          0 allocs/op
+// PASS
+// ok      grokking-algorithms/chapter04   3.224s
+// Wow... The chopping part actually got a bit faster.
 func BenchmarkBinarySearchWithHighAndLow(b *testing.B) {
 	var list []int
 	for i := 1; i <= 100; i++ {

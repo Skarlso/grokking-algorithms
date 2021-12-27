@@ -62,31 +62,33 @@ func FindMax[T constraints.Ordered](list []T, max T) T {
 // one item long ).
 // Recur: Reduce the list... aka, call with tail in case it's higher and call with
 // head in case it's lower.
-func BinarySearch[T constraints.Ordered](list []T, item T, index int) (int, error) {
+func BinarySearch[T constraints.Ordered, I constraints.Signed](list []T, item T, index I) (I, error) {
+	var i I
 	if len(list) == 0 {
-		return -1, errors.New("not found")
+		return i, errors.New("not found")
 	}
 	if len(list) == 1 {
 		if list[0] == item {
 			return index, nil
 		}
-		return -1, errors.New("not found")
+		return i, errors.New("not found")
 	}
 	middle := len(list) / 2
-	if index == -1 {
-		index = middle
+	if index == -1 { // Signed integer
+		index = I(middle)
 	}
 	if list[middle] > item {
 		newList := list[:middle]
 		if len(newList)%2 == 0 {
-			index -= len(newList) / 2
+			l := len(newList) / 2
+			index = index - I(l) // need to convert because this is a generic type
 		} else {
-			index -= (len(newList) / 2) + 1
+			index -= I((len(newList) / 2) + 1)
 		}
 		return BinarySearch[T](newList, item, index)
 	} else if list[middle] < item {
 		newList := list[middle+1:]
-		index += (len(newList) / 2) + 1
+		index += I((len(newList) / 2) + 1)
 		return BinarySearch[T](newList, item, index)
 	}
 
@@ -95,8 +97,7 @@ func BinarySearch[T constraints.Ordered](list []T, item T, index int) (int, erro
 
 // BinarySearchWitLowHigh as expected, this version is much faster, also reads a bit better.
 // And there is no need to mess around with the index, trying to calculate it properly.
-func BinarySearchWitLowHigh(list []int, item int, low int, high int) (int, error) {
-	//var i I
+func BinarySearchWitLowHigh[T constraints.Ordered](list []T, item T, low int, high int) (int, error) {
 	if low > high {
 		return -1, errors.New("not found")
 	}
