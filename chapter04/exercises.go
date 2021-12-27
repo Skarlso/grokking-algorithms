@@ -62,6 +62,8 @@ func FindMax[T constraints.Ordered](list []T, max T) T {
 // one item long ).
 // Recur: Reduce the list... aka, call with tail in case it's higher and call with
 // head in case it's lower.
+// The book defines D&C with breaking down the array. But in this case, that's a sub-par
+// approach. See below for a better approach.
 func BinarySearch[T constraints.Ordered, I constraints.Signed](list []T, item T, index I) (I, error) {
 	var i I
 	if len(list) == 0 {
