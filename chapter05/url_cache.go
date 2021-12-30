@@ -21,14 +21,14 @@ func GetPage[T Data](dataCache DataCache[T], url string) T {
 	if ok {
 		return v
 	}
-	data := GetDataFromServer[T](url)
+	data := getDataFromServer[T](url)
 	dataCache[url] = data
 	return data
 }
 
-// GetDataFromServer is a mock which is called if the cache doesn't have an entry for
+// getDataFromServer is a mock which is called if the cache doesn't have an entry for
 // a key.
-func GetDataFromServer[T Data](key string) T {
+func getDataFromServer[T Data](key string) T {
 	fmt.Println("getting data for key: ", key)
 	return T([]byte("this is generated data"))
 }
