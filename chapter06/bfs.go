@@ -86,7 +86,9 @@ func (g *GraphEdge) Nodes() (*GraphNode, *GraphNode) {
 // as a list of edges. Eq is used to determine parity between nodes. The Eq functions makes
 // this function generic enough instead of trying to shoehorn some other `comparable` type
 // into `Node`.
-// TODO: Maintain an outgoing map of nodes that can be traced back.
+// Note, this would be much more user-friendly, if it would return a map of `cameFrom`s which
+// then could be traversed back to find the shortest path, rather than returning a slice of
+// edges which is difficult to follow back.
 func (g *Graph[Node, Edge]) BFS(from, to Node, eq func(self, other Node) bool) []Edge {
 	queue := []Node{from}
 	path := make([]Edge, 0)
@@ -103,8 +105,6 @@ func (g *Graph[Node, Edge]) BFS(from, to Node, eq func(self, other Node) bool) [
 		for _, edge := range edges {
 			path = append(path, edge)
 			_, dest := edge.Nodes()
-			//fmt.Printf("left: %v; right: %v\n", left, right)
-			//for _, next := range []Node{left, right} {
 			if eq(dest, to) {
 				return path
 			}
@@ -119,7 +119,6 @@ func (g *Graph[Node, Edge]) BFS(from, to Node, eq func(self, other Node) bool) [
 				seen = append(seen, dest)
 				queue = append(queue, dest)
 			}
-			//}
 		}
 	}
 	return nil

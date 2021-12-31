@@ -1,7 +1,6 @@
 package chapter06
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -83,9 +82,18 @@ func TestGraph_BFS(t *testing.T) {
 	got := graph.BFS(start, F, func(self, other *GraphNode) bool {
 		return self.Value == other.Value
 	})
-	for _, g := range got {
-		from, to := g.Nodes()
-		fmt.Println(from, to)
+	startEdge := got[len(got)-1]
+	_, to := startEdge.Nodes()
+	assert.Equal(t, F, to)
+	// Find who points to `from` -> which would be simpler if this would be a MAP.
+	// `cameFrom` should be a map, so it's easy to follow backwards.
+	var bFrom *GraphNode
+	for _, e := range got {
+		edgeFrom, edgeTo := e.Nodes()
+		if edgeTo == B {
+			bFrom = edgeFrom
+			break
+		}
 	}
-	assert.Equal(t, nil, got)
+	assert.Equal(t, start, bFrom)
 }
