@@ -6,7 +6,8 @@ package chapter06
 // This implementation will use the simple map based search from the book.
 // Also note, that this implementation does not work if you happened to start from the seller.
 // Since the starting point is actually not in the queue. It starts with visiting the vertices
-// immediately.
+// immediately. Also, this doesn't return the path in any format, it just says it found the
+// thing you are looking for. There is no proof that the path is the shortest.
 func BFS(graph map[string][]string, name string) bool {
 	queue := graph[name]
 	seen := map[string]struct{}{}
@@ -50,33 +51,76 @@ type EdgeConstraint[Node any] interface {
 
 // Graph is a graph composed of nodes and edges.
 type Graph[Node NodeConstraint[Edge], Edge EdgeConstraint[Node]] struct {
-	// need to implement something here.
+	Nodes []Node
 }
 
 // New returns a new graph given a list of nodes.
 func New[Node NodeConstraint[Edge], Edge EdgeConstraint[Node]](nodes []Node) *Graph[Node, Edge] {
 	// need to implement something here.
-	return nil
+	return &Graph[Node, Edge]{
+		Nodes: nodes,
+	}
 }
 
 // GraphNode is a node in a graph which fulfills the type constraint of nodes.
 type GraphNode struct {
+	Value      string
+	GraphEdges []*GraphEdge
 }
 
 // GraphEdge is an edge in a graph which fulfills the type constraint of edges.
 type GraphEdge struct {
+	From *GraphNode
+	To   *GraphNode
 }
 
 func (g *GraphNode) Edges() []*GraphEdge {
-	return nil
+	return g.GraphEdges
 }
 
 func (g *GraphEdge) Nodes() (*GraphNode, *GraphNode) {
-	return nil, nil
+	return g.From, g.To
 }
 
 // BFS returns the shortest path between two nodes,
-// as a list of edges.
-func (g *Graph[Node, Edge]) BFS(from, to Node) []Edge {
+// as a list of edges. Eq is used to determine parity between nodes. The Eq functions makes
+// this function generic enough instead of trying to shoehorn some other `comparable` type
+// into `Node`.
+// TODO: Maintain an outgoing map of nodes that can be traced back.
+func (g *Graph[Node, Edge]) BFS(from, to Node, eq func(self, other Node) bool) []Edge {
+	queue := []Node{from}
+	path := make([]Edge, 0)
+	// this should be a map for O(1) recall, but in that case I would have to also get a function
+	// which returns a unique identifier for the nodes. But since I already have an Eq function
+	// I can use that.
+	seen := make([]Node, 0)
+	var current Node
+	for len(queue) > 0 {
+		current, queue = queue[0], queue[1:]
+		edges := current.Edges()
+		// For each edge, gather the nodes. The edges contain from -> to syntax,
+		// so we ignore the `from` one. We are only interested in the `to`.
+		for _, edge := range edges {
+			path = append(path, edge)
+			_, dest := edge.Nodes()
+			//fmt.Printf("left: %v; right: %v\n", left, right)
+			//for _, next := range []Node{left, right} {
+			if eq(dest, to) {
+				return path
+			}
+			visited := false
+			for _, s := range seen {
+				if eq(s, dest) {
+					visited = true
+					break
+				}
+			}
+			if !visited {
+				seen = append(seen, dest)
+				queue = append(queue, dest)
+			}
+			//}
+		}
+	}
 	return nil
 }
