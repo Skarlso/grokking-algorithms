@@ -1,16 +1,22 @@
 package chapter07
 
 import (
+	"constraints"
 	"container/heap"
 	"math"
 )
 
-type graph map[string]map[string]int
+// Number which can be used to track `cost`.
+type Number interface {
+	constraints.Integer | constraints.Float
+}
+
+type graph[T comparable, I Number] map[T]map[T]I
 
 // costs contains the cost of all nodes.
-type costs map[string]int
+type costs[T comparable, I Number] map[T]I
 
-type tracker map[string]struct{}
+type tracker[T comparable] map[T]struct{}
 
 // First, I'll implement what the book suggests to use for Dijkstra.
 // Second, I will show how to implement Dijkstra using a Priority Queue.
@@ -27,11 +33,10 @@ type tracker map[string]struct{}
 // Note that the book uses costs map. Usually, Dijkstra just uses a
 // Priority Queue to solve the updating of the costs which I'll demonstrate
 // with a separate function.
-func Dijkstra(g graph, start, finish string) map[string]string {
+func Dijkstra[T comparable](g graph[T, int], start, finish T) map[T]T {
 	// initialise costs and cameFrom
-	cameFrom := make(map[string]string)
-	cameFrom[finish] = ""
-	c := make(costs)
+	cameFrom := make(map[T]T)
+	c := make(costs[T, int])
 	// We set up initial costs for all the nodes that come from the `start` node.
 	for node, cost := range g[start] {
 		c[node] = cost
@@ -41,11 +46,12 @@ func Dijkstra(g graph, start, finish string) map[string]string {
 	c[finish] = math.MaxInt
 
 	// set up the tracker
-	seen := make(tracker)
+	seen := make(tracker[T])
 	// find the lowest cost node from the current nodes.
-	node := findLowestCostNode(c, seen)
+	node := findLowestCostNode[T](c, seen)
+	var end T
 	// while there are nodes...
-	for node != "" {
+	for node != end {
 		for k, v := range g[node] {
 			newCost := c[node] + v
 			if c[k] > newCost {
@@ -54,14 +60,14 @@ func Dijkstra(g graph, start, finish string) map[string]string {
 			}
 		}
 		seen[node] = struct{}{}
-		node = findLowestCostNode(c, seen)
+		node = findLowestCostNode[T](c, seen)
 	}
 	return cameFrom
 }
 
-func findLowestCostNode(c costs, seen tracker) string {
+func findLowestCostNode[T comparable](c costs[T, int], seen tracker[T]) T {
 	min := math.MaxInt
-	var lowest string
+	var lowest T
 	for node, cost := range c {
 		if _, ok := seen[node]; cost < min && !ok {
 			min = cost
@@ -75,7 +81,9 @@ func findLowestCostNode(c costs, seen tracker) string {
 // but the priority queue will take care of finding the lowest node we don't have to construct
 // the cost map with the first couple of nodes, and we don't have to care about assigning
 // math.MaxInt to the finish.
-func DijkstraWithPQ(g graph, start, finish string) map[string]string {
+// I didn't really see the point in providing generics here, unless, I really go wild
+// and provide a proper generic graph like the one in BFS, and implement this there.
+func DijkstraWithPQ(g graph[string, int], start, finish string) map[string]string {
 	var pq PriorityQueue
 	// it's important to use `heap.*` and not `pq.*` directly, because
 	// `heap` is the one which will reorder based on priority using `Len, Less, Swap`.

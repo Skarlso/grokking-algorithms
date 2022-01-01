@@ -9,7 +9,7 @@ import (
 
 func TestDijkstra(t *testing.T) {
 	// Nodes with weights
-	g := graph{
+	g := graph[string, int]{
 		"start": map[string]int{
 			"a": 6,
 			"b": 2,
@@ -41,7 +41,7 @@ func TestDijkstra(t *testing.T) {
 
 func TestDijkstraWithPQ(t *testing.T) {
 	// Nodes with weights
-	g := graph{
+	g := graph[string, int]{
 		"start": map[string]int{
 			"a": 6,
 			"b": 2,
