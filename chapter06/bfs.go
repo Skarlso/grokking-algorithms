@@ -91,11 +91,11 @@ func (g *GraphEdge) Nodes() (*GraphNode, *GraphNode) {
 // edges which is difficult to follow back.
 func (g *Graph[Node, Edge]) BFS(from, to Node, eq func(self, other Node) bool) []Edge {
 	queue := []Node{from}
-	path := make([]Edge, 0)
+	var path []Edge
 	// this should be a map for O(1) recall, but in that case I would have to also get a function
 	// which returns a unique identifier for the nodes. But since I already have an Eq function
 	// I can use that.
-	seen := make([]Node, 0)
+	var seen []Node
 	var current Node
 	for len(queue) > 0 {
 		current, queue = queue[0], queue[1:]
