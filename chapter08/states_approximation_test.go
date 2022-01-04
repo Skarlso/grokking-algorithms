@@ -1,6 +1,7 @@
 package chapter08
 
 import (
+	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -39,4 +40,14 @@ func TestIntersect(t *testing.T) {
 	}
 	got = intersect(m1, m2)
 	assert.Equal(t, expect, got)
+}
+
+func TestStates(t *testing.T) {
+	final := States()
+	var keys []string
+	for k := range final {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	assert.Equal(t, []string{"kfive", "kone", "kthree", "ktwo"}, keys)
 }
