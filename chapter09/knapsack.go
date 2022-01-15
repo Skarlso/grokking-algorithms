@@ -6,7 +6,11 @@ type Item struct {
 	Weight int
 }
 
-// Knapsack is a popular problem
+// Knapsack is a popular problem about how to steal the most expensive items given a weight limit.
+// I was really expecting the book to provider a proper code sample for this as I was looking forward
+// to reading and understanding the nuances that a dynamic programming solution require. But, there were none.
+// So I put this together while reading the chapter. One thing that wasn't intuitive is that I should
+// start with an empty row full of zeros to make choosing the first row a lot easier.
 func Knapsack(items []Item, limit int) int {
 	// why +1? Because we add a row with 0-s that can akt as a minimum value for
 	// the first items.
