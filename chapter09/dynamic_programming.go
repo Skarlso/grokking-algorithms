@@ -33,6 +33,38 @@ func Knapsack(items []Item, limit int) int {
 	return cell[len(items)][limit]
 }
 
+// LongestCommonSubstring finds the longest substring that is common in each of the two strings.
+func LongestCommonSubstring(a, b string) string {
+	// We start from +1 again, so we have the first row empty.
+	cell := make([][]int, len(a)+1)
+	for i := range cell {
+		cell[i] = make([]int, len(b)+1)
+	}
+
+	max := 0
+	maxIndex := 0
+	for i := 1; i <= len(a); i++ {
+		for j := 1; j <= len(b); j++ {
+			// -1 because we started from 1
+			if a[i-1] == b[j-1] {
+				cell[i][j] = cell[i-1][j-1] + 1
+				// save the last maximum point, or last sub index
+				// because the greatest sub index might not be the last row:col.
+				if cell[i][j] > max {
+					maxIndex = i
+					max = cell[i][j]
+				}
+			} else {
+				cell[i][j] = 0
+			}
+		}
+	}
+
+	// From the last index - the maximum value to the last index.
+	// Again, this was not intuitive to figure out.
+	return a[maxIndex-max : maxIndex]
+}
+
 func max(a, b int) int {
 	if a > b {
 		return a
