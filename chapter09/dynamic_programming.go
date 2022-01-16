@@ -1,5 +1,7 @@
 package chapter09
 
+// Item I tried making this generic, but nothing good came out of it.
+// Really, it is just ints and weights. It wasn't worth it.
 type Item struct {
 	Name   string
 	Value  int
@@ -21,6 +23,9 @@ func Knapsack(items []Item, limit int) int {
 	// the first row is left empty with 0s, so it can be the `max` in case of the first item.
 	// Take care to start from 1 for row and col as well.
 	for i := 1; i <= len(items); i++ {
+		// We are comparing it to the weight, so we begin from 1. But this could go backwards
+		// as well, or just -1 it. In any case, we would have to come up with a nicer way
+		// to determine the step of this loop any ways.
 		for j := 1; j <= limit; j++ {
 			item := items[i-1]
 			if item.Weight > j {
@@ -63,6 +68,30 @@ func LongestCommonSubstring(a, b string) string {
 	// From the last index - the maximum value to the last index.
 	// Again, this was not intuitive to figure out.
 	return a[maxIndex-max : maxIndex]
+}
+
+// LongestCommonSubsequence finds the longest subsequence length between two strings. They don't have to be
+// continuous.
+func LongestCommonSubsequence(a, b string) int {
+	// We start from +1 again, so we have the first row empty.
+	cell := make([][]int, len(a)+1)
+	for i := range cell {
+		cell[i] = make([]int, len(b)+1)
+	}
+
+	// almost the same as Knapsack
+	for i := 1; i <= len(a); i++ {
+		for j := 1; j <= len(b); j++ {
+			// -1 because we started from 1
+			if a[i-1] == b[j-1] {
+				cell[i][j] = cell[i-1][j-1] + 1
+			} else {
+				cell[i][j] = max(cell[i-1][j], cell[i][j-1])
+			}
+		}
+	}
+
+	return cell[len(a)][len(b)]
 }
 
 func max(a, b int) int {
