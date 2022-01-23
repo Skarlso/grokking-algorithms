@@ -21,6 +21,21 @@ func TestKnapsack(t *testing.T) {
 	assert.Equal(t, 4000, Knapsack(items, 4))
 }
 
+func TestGenericKnapsack(t *testing.T) {
+	items := []KnapItem{
+		{_Name: "guitar", _Value: 1500, _Weight: 1},
+		{_Name: "stereo", _Value: 3000, _Weight: 4},
+		{_Name: "laptop", _Value: 2000, _Weight: 3},
+	}
+	assert.Equal(t, 3500, KnapsackGeneric(items, []int{1, 2, 3, 4}))
+	items = append(items, KnapItem{
+		_Name:   "iphone",
+		_Value:  2000,
+		_Weight: 1,
+	})
+	assert.Equal(t, 4000, KnapsackGeneric(items, []int{1, 2, 3, 4}))
+}
+
 func TestLongestCommonSubstring(t *testing.T) {
 	type args struct {
 		a string
