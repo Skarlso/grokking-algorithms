@@ -19,6 +19,8 @@ I added a bunch of comments to all the code for those who just would like to rea
 and understand why things are where they are. If anything is missing, or more explanation is required,
 please don't hesitate to open an issue.
 
+Also, in some cases, I added the exercises as well. I will continue to add more if needed.
+
 ## Why?
 
 For the glory of the Sontaran Empire of course! That, and because learning is always fun. All in all
