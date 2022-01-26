@@ -15,7 +15,7 @@ func BinarySearch[T constraints.Ordered](list []T, item T) (T, error) {
 	head := 0
 	tail := len(list) - 1
 	for head <= tail {
-		middle := head + tail
+		middle := (head + tail)/2
 		guess := list[middle]
 		if guess == item {
 			return guess, nil
