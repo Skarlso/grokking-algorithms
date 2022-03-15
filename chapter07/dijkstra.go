@@ -48,7 +48,7 @@ func Dijkstra[T comparable](g graph[T, int], start, finish T) map[T]T {
 	// set up the tracker
 	seen := make(tracker[T])
 	// find the lowest cost node from the current nodes.
-	node := findLowestCostNode[T](c, seen)
+	node := findLowestCostNode(c, seen)
 	var end T
 	// while there are nodes...
 	for node != end {
@@ -60,7 +60,7 @@ func Dijkstra[T comparable](g graph[T, int], start, finish T) map[T]T {
 			}
 		}
 		seen[node] = struct{}{}
-		node = findLowestCostNode[T](c, seen)
+		node = findLowestCostNode(c, seen)
 	}
 	return cameFrom
 }
