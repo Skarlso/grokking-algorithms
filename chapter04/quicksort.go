@@ -28,3 +28,32 @@ func Quicksort[T constraints.Ordered](list []T) []T {
 	less = append(Quicksort(less), pivot)
 	return append(less, Quicksort(more)...)
 }
+
+// Wikipedia implementation of quicksort.
+func partition[T constraints.Ordered](list []T, low, high int) int {
+	i := low - 1
+	pivot := list[high]
+
+	for j := low; j < high; j++ {
+		if list[j] <= pivot {
+			i++
+			list[i], list[j] = list[j], list[i]
+		}
+	}
+	i++
+	list[i], list[high] = list[high], list[i]
+	return i
+}
+
+func quicksort[T constraints.Ordered](list []T, low, high int) {
+	if len(list) == 1 {
+		return
+	}
+	if low >= high || low < 0 {
+		return
+	}
+
+	p := partition(list, low, high)
+	quicksort(list, low, p-1)
+	quicksort(list, p+1, high)
+}

@@ -87,11 +87,11 @@ func BinarySearch[T constraints.Ordered, I constraints.Signed](list []T, item T,
 		} else {
 			index -= I((len(newList) / 2) + 1)
 		}
-		return BinarySearch[T](newList, item, index)
+		return BinarySearch(newList, item, index)
 	} else if list[middle] < item {
 		newList := list[middle+1:]
 		index += I((len(newList) / 2) + 1)
-		return BinarySearch[T](newList, item, index)
+		return BinarySearch(newList, item, index)
 	}
 
 	return index, nil
