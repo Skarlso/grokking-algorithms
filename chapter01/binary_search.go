@@ -1,8 +1,8 @@
 package chapter01
 
 import (
-	"constraints"
 	"errors"
+	"golang.org/x/exp/constraints"
 )
 
 // BinarySearch binary search has a runtime of O(logn).

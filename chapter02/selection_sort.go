@@ -1,6 +1,6 @@
 package chapter02
 
-import "constraints"
+import "golang.org/x/exp/constraints"
 
 // SelectionSort constructs a new slice with ordered elements by continuously finding
 // the lowest element. It alters the original slice by popping that element out of the
