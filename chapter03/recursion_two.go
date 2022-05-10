@@ -1,6 +1,6 @@
 package chapter03
 
-import "constraints"
+import "golang.org/x/exp/constraints"
 
 // Factorial demonstrates how the call stack works.
 func Factorial[T constraints.Integer](i T) T {

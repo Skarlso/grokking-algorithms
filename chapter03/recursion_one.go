@@ -1,7 +1,7 @@
 package chapter03
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 )
 
 // PlainRecurse just prints something to the console.

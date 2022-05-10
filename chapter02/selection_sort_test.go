@@ -1,7 +1,7 @@
 package chapter02
 
 import (
-	"constraints"
+	"golang.org/x/exp/constraints"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

@@ -1,8 +1,8 @@
 package chapter07
 
 import (
-	"constraints"
 	"container/heap"
+	"golang.org/x/exp/constraints"
 	"math"
 )
 

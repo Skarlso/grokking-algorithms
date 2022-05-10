@@ -1,6 +1,6 @@
 package chapter04
 
-import "constraints"
+import "golang.org/x/exp/constraints"
 
 // Quicksort uses inductive proof to verify that it can sort a list
 // with zero or one item; therefor, if the list is reduced to that number

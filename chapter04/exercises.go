@@ -5,8 +5,8 @@
 package chapter04
 
 import (
-	"constraints"
 	"errors"
+	"golang.org/x/exp/constraints"
 )
 
 // Sum an array.
